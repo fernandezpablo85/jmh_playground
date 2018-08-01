@@ -126,18 +126,25 @@ public class PairCount
     {
         AtomicReference<Holder> holder = new AtomicReference<>(new Holder(new long[]{0, 0}));
 
+        private Holder nextHolder(Holder h)
+        {
+            long n = h.getNumbers()[0];
+            long next = n + 1;
+            long[] newNumbers = new long[]{next, next};
+            return new Holder(newNumbers);
+        }
+
         @Override
         public long add()
         {
-            Holder currentHolder = holder.get();
-            long n = currentHolder.getNumbers()[0];
-            long next = n + 1;
-            long[] newNumbers = new long[]{next, next};
-            Holder newHolder = new Holder(newNumbers);
+            Holder current = holder.get();
+            Holder newHolder = this.nextHolder(current);
 
-            boolean success = this.holder.compareAndSet(currentHolder, newHolder);
+            boolean success = this.holder.compareAndSet(current, newHolder);
             while(!success) {
-                success = this.holder.compareAndSet(currentHolder, newHolder);
+                current = holder.get();
+                newHolder = this.nextHolder(current);
+                success = this.holder.compareAndSet(current, newHolder);
             }
             return newHolder.getSum();
         }
