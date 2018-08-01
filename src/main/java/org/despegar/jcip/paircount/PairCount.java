@@ -14,6 +14,11 @@ public class PairCount
         long add();
     }
 
+
+    /*
+     * Unsafe. Reorder of operations may result in invariant violation.
+     * e.g: numbers = [1, 2] and sum = 3
+     */
     @State(Scope.Benchmark)
     public static class UnsafeCounter implements Counter
     {
@@ -33,6 +38,9 @@ public class PairCount
     }
 
 
+    /*
+     * Safe but slow. Synchronize guarantees operation order and invariant enforcement, but only one thread at a time.
+     */
     @State(Scope.Benchmark)
     public static class SafeButSlowCounter implements Counter
     {
@@ -89,6 +97,10 @@ public class PairCount
 
     }
 
+    /*
+     * Safe and fast, but non sequential. Invariants hold since Holder is immutable, but it may happen that we
+     * get the same sum() twice due to a check-then-act race condition.
+     */
     @State(Scope.Benchmark)
     public static class SafeNonSeqCounter implements Counter
     {
@@ -106,10 +118,13 @@ public class PairCount
         }
     }
 
+    /*
+     * Safe, pretty fast and sequential. Holder guarantees invariants and AtomicReference CAS guarantees monotonicity.
+     */
     @State(Scope.Benchmark)
     public static class SafeSeqCounter implements Counter
     {
-        AtomicReference<Holder> holder = new AtomicReference(new Holder(new long[]{0, 0}));
+        AtomicReference<Holder> holder = new AtomicReference<>(new Holder(new long[]{0, 0}));
 
         @Override
         public long add()
