@@ -41,4 +41,14 @@ public class Optimizations
     return Math.log(dh.val);
   }
 
+  /*
+    SPOILERS:
+
+    Benchmark                   Mode  Cnt   Score   Error  Units
+    Optimizations.doNothing     avgt   10   0.396 ± 0.036  ns/op
+    Optimizations.logImpl       avgt   10   0.373 ± 0.005  ns/op
+    Optimizations.logImplThree  avgt   10  30.341 ± 1.375  ns/op
+    Optimizations.logImplTwo    avgt   10   3.809 ± 0.425  ns/op
+   */
+
 }
