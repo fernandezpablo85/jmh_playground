@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class Optimizations
 {
   @State(Scope.Benchmark)
